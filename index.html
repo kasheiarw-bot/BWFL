@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Black Women’s Futures Lab · Black Futures From the Creative Minds of Black Women</title>
+  <meta name="description" content="A luminous, Afrofuturist lab where Black women experiment with AI & digital literacy to build liberated futures—together." />
+  <meta name="robots" content="index,follow" />
+
+  <!-- Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Black Women’s Futures Lab" />
+  <meta property="og:description" content="A luminous, Afrofuturist lab where Black women shape what’s next—together." />
+  <meta property="og:image" content="./images/og-placeholder.jpg" />
+  <meta property="og:url" content="https://your-site.example/bwfl" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Space Grotesk', 'Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono','ui-monospace','SFMono-Regular','monospace']
+          },
+          colors: {
+            plum:   '#6E27FF',
+            grape:  '#8F3BFF',
+            magma:  '#FF3B30',
+            ember:  '#FF6A3D',
+            sun:    '#FFC857',
+            cream:  '#F5E8D8',
+            ink:    '#0B0610',
+            mulberry: '#9B287B',
+            blush:  '#FF7AB6',
+            orchid: '#DE6BFF'
+          },
+          boxShadow: {
+            aura: '0 0 0 1px rgba(255,255,255,.14) inset, 0 12px 40px rgba(255, 77, 0, .18)',
+            glow: '0 0 40px rgba(255, 72, 0, .35)'
+          },
+          keyframes: {
+            floaty: { '0%,100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-12px)' } },
+            drift:  { '0%': { transform: 'translate3d(0,0,0) rotate(0deg)' }, '100%': { transform: 'translate3d(0,-6px,0) rotate(1deg)' } },
+            pulseLine: { '0%,100%': { opacity: .35 }, '50%': { opacity: 1 } },
+            shine: { '0%': { backgroundPosition: '0% 50%' }, '100%': { backgroundPosition: '200% 50%' } },
+            comet: { '0%': { transform: 'translateX(-10%)' }, '100%': { transform: 'translateX(110%)' } },
+            marquee: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
+            huewave: { '0%': { filter: 'hue-rotate(0deg)' }, '100%': { filter: 'hue-rotate(360deg)' } },
+            twinkle: { '0%,100%': { opacity: .3 }, '50%': { opacity: 1 } },
+            nebula: {
+              '0%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' },
+              '100%': { backgroundPosition: '0% 50%' }
+            }
+          },
+          animation: {
+            floaty: 'floaty 6s ease-in-out infinite',
+            drift: 'drift 9s ease-in-out infinite',
+            pulseLine: 'pulseLine 2.8s ease-in-out infinite',
+            shine: 'shine 16s linear infinite',
+            comet: 'comet 8s linear infinite',
+            marquee: 'marquee 28s linear infinite',
+            huewave: 'huewave 60s linear infinite',
+            twinkle: 'twinkle 3.4s ease-in-out infinite',
+            nebula: 'nebula 40s ease-in-out infinite'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root { color-scheme: dark; }
+    /* Painterly grain */
+    .grain:before { content:""; pointer-events:none; position:fixed; inset:-10%; z-index:0; background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity=".045"/></svg>'); mix-blend-mode:overlay; }
+
+    /* === NEW FEMME NEBULA BACKGROUND ===
+       Layered approach:
+       1) Nebula gradient layer with animated shift
+       2) Canvas starfield (JS draws twinkling stars)
+       3) SVG constellations with soft glow
+       The rest of the layout stays the same. */
+
+    body { background: #09060b; }
+    .nebula { position: fixed; inset: -10%; z-index: -30; filter: saturate(1.15) contrast(1.05); }
+    .nebula::before { content:""; position:absolute; inset:0; background: radial-gradient(1200px 800px at 10% -10%, rgba(255,106,130,.22), transparent 60%), radial-gradient(1100px 700px at 80% -10%, rgba(222,107,255,.22), transparent 60%), radial-gradient(900px 500px at 20% 110%, rgba(255,136,61,.20), transparent 60%), radial-gradient(1200px 700px at 80% 120%, rgba(158,64,255,.18), transparent 60%), linear-gradient(120deg, #200a27, #170812, #0a0710); background-size: 140% 140%; animation: nebula 50s ease-in-out infinite; filter: blur(22px); }
+
+    /* Starfield canvas sits above nebula */
+    #starfield { position: fixed; inset: 0; z-index: -20; mix-blend-mode: screen; opacity:.8; }
+
+    /* Constellations layer (soft, feminine curves) */
+    .constellations { position: fixed; inset: 0; z-index: -10; pointer-events: none; }
+    .constellations .node { filter: drop-shadow(0 0 6px rgba(255,182,193,.6)); }
+    .constellations .line { stroke: rgba(255,218,185,.45); stroke-width: 1.4; filter: drop-shadow(0 0 4px rgba(255,218,185,.45)); }
+
+    /* Glass + motion util classes preserved */
+    .tx-aurora { background: linear-gradient(90deg, #FF7AB6, #FFC857, #8F3BFF, #FF6A3D, #FFC857); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 16s linear infinite; }
+    .glass { backdrop-filter: blur(10px); background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(255,255,255,0.05)); border: 1px solid rgba(255,255,255,0.14); }
+    .bevel { box-shadow: inset 0 1px 0 rgba(255,255,255,.12), inset 0 -1px 0 rgba(0,0,0,.25); }
+    .tilt { transform-style: preserve-3d; transition: transform .35s cubic-bezier(.2,.8,.2,1); }
+    .tilt:hover { transform: perspective(800px) rotateX(4deg) rotateY(-6deg) translateZ(6px); }
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform .8s ease; }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body class="text-white/95 font-display grain overflow-x-clip">
+
+  <!-- BACKGROUND: Femme Nebula + Starfield + Constellations -->
+  <div class="nebula"></div>
+  <canvas id="starfield"></canvas>
+  <svg class="constellations" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+    <!-- Example constellation (stylized Venus glyph motif) -->
+    <g opacity=".8">
+      <circle class="node" cx="15" cy="22" r="0.6" fill="#ffd6e7"/>
+      <circle class="node" cx="24" cy="30" r="0.5" fill="#ffd6e7"/>
+      <circle class="node" cx="33" cy="20" r="0.7" fill="#ffd6e7"/>
+      <circle class="node" cx="42" cy="28" r="0.55" fill="#ffd6e7"/>
+      <path class="line" d="M15 22 L24 30 L33 20 L42 28" fill="none"/>
+    </g>
+    <g opacity=".75">
+      <circle class="node" cx="70" cy="68" r="0.6" fill="#ffe2f0"/>
+      <circle class="node" cx="78" cy="60" r="0.5" fill="#ffe2f0"/>
+      <circle class="node" cx="85" cy="72" r="0.6" fill="#ffe2f0"/>
+      <path class="line" d="M70 68 L78 60 L85 72" fill="none"/>
+    </g>
+  </svg>
+
+  <!-- Header / Nav (unchanged) -->
+  <header class="relative z-10">
+    <nav class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-ember via-plum to-magma bevel"></div>
+        <span class="text-sm tracking-[0.22em] font-mono uppercase text-cream/90">Black Women’s Futures Lab</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8 text-sm text-cream/90">
+        <a class="hover:text-sun" href="#about">About</a>
+        <a class="hover:text-sun" href="#experience">Experience</a>
+        <a class="hover:text-sun" href="#who">Who</a>
+        <a class="hover:text-sun" href="#how">How</a>
+        <a class="hover:text-sun" href="#articles">Articles</a>
+        <a class="hover:text-sun" href="#join">Join</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative">
+    <div class="max-w-7xl mx-auto px-6 pt-6 pb-16 md:pt-10 md:pb-28">
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div class="relative z-10">
+          <div class="inline-flex items-center gap-2 rounded-full px-3 py-1 glass text-cream/95 text-[12px] font-mono tracking-widest">
+            <span class="h-1.5 w-1.5 rounded-full bg-sun animate-pulse"></span>
+            AI • Digital Literacy • Liberation by Design
+          </div>
+          <h1 class="mt-4 text-5xl md:text-7xl font-extrabold leading-[1.04]">
+            A <span class="tx-aurora">communal</span> hub where Black Women <span class="text-sun">experiment</span>, learn, and build liberated futures.
+          </h1>
+          <p class="mt-5 text-lg text-cream/90 max-w-2xl">
+            Not a classroom, but a Lab—a space built by and for Black women to sharpen our tools, connect our brilliance, and prototype what's next.
+          </p>
+          <div class="mt-8 flex flex-wrap gap-4">
+            <a href="#join" class="tilt inline-flex items-center gap-2 rounded-xl bg-ember px-6 py-3 font-semibold text-ink shadow-aura hover:shadow-glow transition">
+              Join the Lab — Free
+            </a>
+            <a href="#about" class="tilt inline-flex items-center gap-2 rounded-xl px-6 py-3 ring-1 ring-cream/30 hover:bg-white/5 transition">Learn more</a>
+          </div>
+
+          <!-- Keyword marquee -->
+          <div class="mt-8 overflow-hidden rounded-xl ring-1 ring-white/10">
+            <div class="whitespace-nowrap py-2 bg-white/5 text-cream/80 font-mono text-[12px] animate-marquee">
+              <span class="mx-6">Afrofuturism</span>
+              <span class="mx-6">AI literacy</span>
+              <span class="mx-6">Digital sovereignty</span>
+              <span class="mx-6">Neurodivergent‑affirming</span>
+              <span class="mx-6">Collective experiments</span>
+              <span class="mx-6">Generational wealth</span>
+              <span class="mx-6">Black women leading</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero art placeholder -->
+        <div class="relative">
+          <figure class="relative glass rounded-3xl overflow-hidden tilt">
+            <img src="./images/placeholder-hero-1.jpg" alt="Placeholder hero artwork" class="w-full h-full object-cover">
+            <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+              <div class="absolute top-6 left-6 h-1 w-24 bg-gradient-to-r from-sun to-ember rounded-full animate-pulseLine"></div>
+              <div class="absolute bottom-6 right-6 h-1 w-40 bg-gradient-to-r from-plum to-magma rounded-full animate-pulseLine" style="animation-delay: .8s"></div>
+            </div>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="relative py-14 md:py-24">
+    <div class="max-w-5xl mx-auto px-6">
+      <div class="grid md:grid-cols-5 gap-8 items-center">
+        <div class="md:col-span-3 reveal">
+          <h2 class="text-3xl md:text-5xl font-extrabold">About the Lab</h2>
+          <p class="mt-4 text-cream/90">
+            Too many “future” spaces are gimmicky, profit-driven, or simply not built for us. The <strong>Black Women’s Futures Lab</strong> is a culturally relevant, liberatory tech space where Black women build <strong>AI literacy, digital skills, and entrepreneurial confidence</strong> without falling into hustle gimmicks or grind culture.
+          </p>
+          <p class="mt-4 text-cream/90">
+            Here, we claim the tools of today—AI, digital literacy, collective knowledge—and rework them to build truly free futures. We share wisdom, test possibilities, and imagine beyond the limits of now. 
+          </p> 
+          <p class="mt-4 text-cream/90">
+            The future won’t wait. In this Lab, we set the pace.
+          </p>
+        </div>
+        <div class="md:col-span-2 reveal">
+          <div class="glass rounded-2xl p-4">
+            <img src="./images/placeholder-about.jpg" alt="About placeholder" class="w-full h-48 object-cover rounded-xl">
+            <p class="mt-3 text-sm text-cream/85">Replace with an expressive Afrofuturist abstract—bold purples/oranges/reds with cream highlights.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="relative py-10 md:py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-extrabold reveal">What you’ll experience</h2>
+      <div class="mt-8 grid md:grid-cols-3 gap-6">
+        <div class="glass rounded-2xl p-6 tilt reveal">
+          <h3 class="font-semibold text-xl text-sun">Community</h3>
+          <p class="mt-2 text-cream/90">A sisterhood of forward‑thinking Black women with constellated minds, building a support network rooted in liberation.</p>
+        </div>
+        <div class="glass rounded-2xl p-6 tilt reveal">
+          <h3 class="font-semibold text-xl text-ember">Literacy</h3>
+          <p class="mt-2 text-cream/90">Practical AI & digital skills through an equity lens. No gimmicks—real capability that compounds.</p>
+        </div>
+        <div class="glass rounded-2xl p-6 tilt reveal">
+          <h3 class="font-semibold text-xl text-plum">Liberation</h3>
+          <p class="mt-2 text-cream/90">Collective experiments, healing joy, and future‑building as daily practice. We iterate in public and grow together.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO / NOT -->
+  <section id="who" class="relative py-14 md:py-20">
+    <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-8 items-start">
+      <div class="glass rounded-2xl p-6 reveal">
+        <h2 class="text-3xl font-extrabold">Who it’s for</h2>
+        <ul class="mt-4 space-y-3 text-cream/90 list-disc list-inside">
+          <li>Gen X, Millennial, and older Gen Z Black women futurists</li>
+          <li>Multi‑gifted, entrepreneurial‑minded, often neurodivergent, and future‑oriented</li>
+          <li>Women raising future‑ready children, building businesses, or preparing for sovereign futures</li>
+          <li>Committed to generational wealth and communal resilience</li>
+        </ul>
+      </div>
+      <div class="glass rounded-2xl p-6 reveal">
+        <h3 class="text-2xl font-semibold">What it’s not</h3>
+        <ul class="mt-4 space-y-3 text-cream/85 list-disc list-inside">
+          <li>No get‑rich‑quick gimmicks or hustle‑culture grind</li>
+          <li>No spaces that refuse to center Black women—period</li>
+          <li>No tech idolatry—tools serve people, not the other way around</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS with comet line -->
+  <section id="how" class="relative py-14 md:py-24">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-extrabold reveal">How it works</h2>
+      <div class="mt-8 grid md:grid-cols-3 gap-6">
+        <div class="glass rounded-2xl p-6 reveal">
+          <span class="font-mono text-xs text-cream/80">Step 1</span>
+          <h3 class="mt-1 font-semibold text-xl">Opt in</h3>
+          <p class="mt-2 text-cream/90">Join with your email to receive your welcome kit and private community access.</p>
+        </div>
+        <div class="glass rounded-2xl p-6 reveal">
+          <span class="font-mono text-xs text-cream/80">Step 2</span>
+          <h3 class="mt-1 font-semibold text-xl">Enter the Lab</h3>
+          <p class="mt-2 text-cream/90">Explore weekly sparks, prompts, and shared experiments to grow your skills.</p>
+        </div>
+        <div class="glass rounded-2xl p-6 reveal">
+          <span class="font-mono text-xs text-cream/80">Step 3</span>
+          <h3 class="mt-1 font-semibold text-xl">Build futures</h3>
+          <p class="mt-2 text-cream/90">Join monthly live sessions and collective challenges. Turn ideas into blueprints.</p>
+        </div>
+      </div>
+
+      <div class="mt-10 relative overflow-hidden rounded-2xl ring-1 ring-white/10">
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+        <div class="h-1 bg-gradient-to-r from-plum via-sun to-magma relative">
+          <div class="absolute -left-24 -top-1 h-3 w-24 rounded-full bg-white/70 blur-md animate-comet"></div>
+        </div>
+        <p class="text-center font-mono text-[11px] text-cream/80 py-3">One path • One offer • Real momentum</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ARTICLES -->
+  <section id="articles" class="relative py-14 md:py-20">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex items-center justify-between gap-6">
+        <h2 class="text-3xl md:text-4xl font-extrabold reveal">Latest Articles & Insights</h2>
+        <a href="https://futuresinblack.substack.com" target="_blank" rel="noopener" class="hidden md:inline text-sm text-cream/85 hover:text-sun">View all →</a>
+      </div>
+      <div class="mt-8 grid md:grid-cols-3 gap-6">
+        <article class="glass rounded-2xl overflow-hidden tilt reveal">
+          <img src="./images/placeholder-article-1.jpg" alt="Article placeholder" class="w-full h-44 object-cover">
+          <div class="p-5">
+            <h3 class="font-semibold">AI Literacy for Black Women: Liberation Work</h3>
+            <p class="mt-2 text-sm text-cream/85">Understand AI as a tool for sovereignty and community power.</p>
+          </div>
+        </article>
+        <article class="glass rounded-2xl overflow-hidden tilt reveal">
+          <img src="./images/placeholder-article-2.jpg" alt="Article placeholder" class="w-full h-44 object-cover">
+          <div class="p-5">
+            <h3 class="font-semibold">Generational Wealth in an AI‑Driven World</h3>
+            <p class="mt-2 text-sm text-cream/85">From digital skills to collective economics, strategy beats trends.</p>
+          </div>
+        </article>
+        <article class="glass rounded-2xl overflow-hidden tilt reveal">
+          <img src="./images/placeholder-article-3.jpg" alt="Article placeholder" class="w-full h-44 object-cover">
+          <div class="p-5">
+            <h3 class="font-semibold">Raising Future‑Ready Children</h3>
+            <p class="mt-2 text-sm text-cream/85">Practical ways to nurture curiosity, tech literacy, and resilience.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FACILITATOR -->
+  <section id="facilitator" class="relative py-14 md:py-24">
+    <div class="max-w-6xl mx-auto px-6 grid lg:grid-cols-5 gap-10 items-center">
+      <div class="lg:col-span-2 reveal">
+        <div class="glass rounded-3xl overflow-hidden">
+          <img src="./images/placeholder-facilitator.jpg" alt="Facilitator placeholder" class="w-full h-full object-cover">
+        </div>
+      </div>
+      <div class="lg:col-span-3 reveal">
+        <h2 class="text-3xl md:text-4xl font-extrabold">Meet the Facilitator</h2>
+        <p class="mt-3 text-cream/90">Kasheia Williams — Founder, Futures in Black. Financial professional, futurist, and community builder. The Lab centers Black women’s leadership, practical AI literacy, and liberatory economics—so we can thrive in uncertain times.</p>
+        <ul class="mt-4 grid sm:grid-cols-2 gap-3 text-cream/90">
+          <li class="flex items-center gap-2"><span>✓</span><span>AI & digital literacy for Black women</span></li>
+          <li class="flex items-center gap-2"><span>✓</span><span>Neurodivergent‑affirming learning space</span></li>
+          <li class="flex items-center gap-2"><span>✓</span><span>Community‑centered, anti‑grind ethos</span></li>
+          <li class="flex items-center gap-2"><span>✓</span><span>Afrofuturism & practical tech skills</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- JOIN CTA -->
+  <section id="join" class="relative py-20 text-center">
+    <div class="max-w-4xl mx-auto px-6 reveal">
+      <h2 class="text-3xl md:text-4xl font-extrabold">Join the Lab</h2>
+      <p class="mt-3 text-cream/90">Free, powerful, and future‑focused. Enter your email to get your welcome kit and community link.</p>
+      <form class="mt-8 mx-auto max-w-2xl glass rounded-2xl p-3" method="post" action="#">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <label for="email" class="sr-only">Email</label>
+          <input id="email" name="email" type="email" required placeholder="you@example.com" class="w-full rounded-xl bg-white/10 px-4 py-3 outline-none ring-1 ring-white/15 focus:ring-2 focus:ring-sun" />
+          <button type="submit" class="rounded-xl bg-sun text-ink font-semibold px-5 py-3 shadow-aura hover:shadow-glow transition">Join Free</button>
+        </div>
+        <p class="mt-2 text-xs text-cream/75">We respect your time and attention. Unsubscribe anytime.</p>
+      </form>
+      <!-- BG toggles -->
+      <div class="mt-6 flex items-center justify-center gap-6 text-sm text-cream/80">
+        <button id="toggleConstellations" class="underline underline-offset-4 hover:text-sun">Toggle constellations</button>
+        <button id="toggleStars" class="underline underline-offset-4 hover:text-sun">Toggle stars</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="relative py-10 text-center text-sm text-cream/70">
+    <p>© <span id="year"></span> Black Women’s Futures Lab</p>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Scroll reveal
+    const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in') }) }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    // Starfield (twinkling, subtle)
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    let w, h, stars = [];
+    function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+    window.addEventListener('resize', resize); resize();
+    function makeStars(n=160){
+      stars = Array.from({length:n}, ()=>({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r: Math.random()*1.2 + 0.2,
+        o: Math.random()*0.7 + 0.2,
+        s: Math.random()*0.02 + 0.005
+      }));
+    }
+    makeStars();
+    let t=0; 
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      t += 1;
+      for(const st of stars){
+        const pulse = st.o + Math.sin((t*st.s)+st.x*0.01)*0.2;
+        ctx.beginPath();
+        ctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(255, 236, 248, ${Math.max(0,Math.min(1,pulse))})`;
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    draw();
+
+    // BG toggles
+    const constellationLayer = document.querySelector('.constellations');
+    const starToggle = document.getElementById('toggleStars');
+    const constToggle = document.getElementById('toggleConstellations');
+    starToggle?.addEventListener('click', ()=>{
+      canvas.style.display = canvas.style.display === 'none' ? 'block' : 'none';
+    });
+    constToggle?.addEventListener('click', ()=>{
+      const display = getComputedStyle(constellationLayer).display;
+      constellationLayer.style.display = (display === 'none' ? 'block' : 'none');
+    });
+  </script>
+</body>
+</html>
